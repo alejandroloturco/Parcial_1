@@ -1,0 +1,90 @@
+#se requiere un codigo que genere un menu en el cual se ingresen pacientes para ello se crea un ciclo que podra romper el usuario para salir,
+#o por el contrario que le permitira seguir en el mismo ciclo ingresando mas paciente, cada paciente adquiere una posicion dentro de una lista inicial
+#que almacena todos los datos de cada paciente ingresado, dentro del menU se deberan hacer procesos de comparacion para determinar
+#el estado de los paciente, arrojando de forma automatica el estado y si accede o no a cirugia
+#Se usan contadores y variables especificas que permiten comparar y validar la informacion entregada por el usario
+
+Datos_paciente = []                                                                 #Lista que almacena a los pacientes
+acceso = 0                                                                          #Permite el acceso y salida del ciclo
+while acceso == 0:
+    paciente = []                                                                   #Lista que almacena la informacion del paciente ingresado
+    TP = 0                                                                          #Valor del TP ingresado para el paciente
+    cond_TP = 0                                                                     #permite la diferenciacion entre las medidas de sg o IIN
+    TP_result = 0                                                                   #Contro si los valores de TP son normales o anormales
+    PPT_result = 0                                                                  #Controla si los valores de PPT son normales o anormales
+    fibri_result = 0                                                                #Controla si los valores de fibrinogeno son normales o anormales
+    menu = int(input('''Seleccione la opcion que desea llevar a cabo: 
+                     \r1-- Ingreso de paciente                 
+                     \r2-- Ver todos los pacientes
+                     \r3-- Salir
+                     \r--->'''))          #Variable que funciona como menu, permite al usuario navegar entre las opciones del menu
+    
+    if menu == 1:                                                                   #Opcion 1(Ingreso de pacientes)
+        paciente.append(input('Nombre del paciente: '))                             #Pide el nombre del paciente y lo agrega a la lista del paciente
+        paciente.append(int(input('Numero de documento de identidad (ID): ')))      #Pide el ID del paciente y lo agrega a la lsita del paciente
+        anticoagulantes = int(input('''El paciente se encuentra tomando anticoagulantes?:
+                                    \r1--- Si
+                                    \r2--- No
+                                    \r--->'''))                                     #Pide informacion sobre el consumo de anticoagulantes               
+        if anticoagulantes == 2:
+            cond_TP = int(input('''En que valores desea ingresar la prueba de "Tiempo de protombina"
+                            \r1-- Segundos
+                            \r2-- IIN
+                            \r--->'''))                                             #Pide informacion de las unidades en las que fue medida la TP
+            if cond_TP == 1:
+                TP = float(input('Ingrese el valor obtenido en la prueba de "Tiempo de protombina (sg)": '))
+                if 11 < TP <13.5:
+                    TP_result = 1                                           
+                else:
+                    TP_result = 0
+            elif cond_TP == 2:
+                TP = float(input('Ingrese el valor obtenido en la prueba de "Tiempo de protombina (IIN)": '))
+                if 0.8 < TP < 1.1:
+                    TP_result = 1                                           
+                else:
+                    TP_result = 0
+            PPT = int(input('Ingrese el valor de la prueba de "Tiempo de tromboplastina parcial" (sg): '))
+            if 25 < PPT < 35:
+                PPT_result = 1
+            else:
+                PPT_result = 0
+        elif anticoagulantes == 1:
+            TP = float(input('Ingrese el valor obtenido en la prueba de "Tiempo de protombina (IIN)": '))
+            if 2.0 < TP < 3.0:
+                TP_result = 1                                           
+            else:
+                TP_result = 0
+            PPT = int(input('Ingrese el valor de la prueba de "Tiempo de tromboplastina parcial" (sg): '))
+            if 62 < PPT < 88:
+                PPT_result = 1
+            else:
+                PPT_result = 0
+        fibri = int(input('Ingrese los valores obtenidos en la pruba de fibrinogeno (g/dL): '))        #Variable que pide el valor de fibrinogeno
+        fibri *= 100
+        if 200 < fibri < 400:
+            fibri_result = 1
+        else:
+            fibri_result = 0
+        if TP_result == 0 and PPT_result == 0 and fibri_result == 0:
+            paciente.append('Apto')
+        else:
+            paciente.append('No apto')
+        print(f'''Paciente
+                \rNombre {paciente[0]}
+                \rDocumento de identidad {paciente[1]}
+                \rDiagnostico {paciente[2]}''')
+        if paciente == 'No apto':
+            print('Se requieren estudios complementarios')
+        Datos_paciente.append(paciente)
+    elif menu == 2:                                                                 #Opcion 2(ver informacion de los apcientes, cantidad de pacientes)
+        cont_paciente = 1                                                           #Contador de cad apciente ingresado
+        for i in Datos_paciente:            
+            print(f'''Paciente #{cont_paciente}
+                    \rNombre {i[0]}
+                    \rDocumento de identificacion {i[1]}
+                    \rDiagnostico {i[2]}''')
+            cont_paciente += 1
+    elif menu == 3:                                                                 #Opcion 3(salir delmenu, rompe el ciclo)
+        acceso = 1 
+    else:
+        print('Por favor ingrese un valor valido entre 1 y 3 dependiendo de la opcion que desea utilizar')
